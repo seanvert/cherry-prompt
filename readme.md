@@ -6,7 +6,7 @@ A lightweight, interactive file-list aggregator for GNU Emacs. Perfect for cherr
 
 Built using pure Elisp, leveraging `tabulated-list-mode` for a familiar Dired/Buffer-menu experience, and `savehist` for seamless persistence between sessions.
 
-![Cherry-Prompt em Ação](ss.jpg)
+![Cherry-Prompt em Ação](https://github.com/seanvert/cherry-prompt/blob/main/ss.png?raw=true)
 
 ## Features
 
