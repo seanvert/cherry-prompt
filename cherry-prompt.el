@@ -11,10 +11,10 @@ O formato é ((\"nome-da-lista\" . (\"arq1\" \"arq2\"))).")
 
 (defvar my/file-list-manager-buffer "*Gerenciador de Lista*"
   "Nome do buffer interativo de gerenciamento de arquivos.")
-
+(require 'savehist)
 ;; Ativa o savehist-mode para persistir dados entre sessões
-(savehist-mode 1)
 (add-to-list 'savehist-additional-variables 'my/file-lists)
+(savehist-mode 1)
 
 ;; =========================================================================
 ;; 2. FUNÇÕES DE MANIPULAÇÃO DE ARQUIVOS E LISTAS
@@ -48,6 +48,7 @@ O formato é ((\"nome-da-lista\" . (\"arq1\" \"arq2\"))).")
       (error "Uma lista com o nome '%s' já existe!" name)
     (push (cons name nil) my/file-lists)
     (setq my/active-file-list name)
+	(savehist-save)
     (message "Lista '%s' criada e definida como ATIVA." name)))
 
 (defun my/select-active-list ()
@@ -72,6 +73,7 @@ O formato é ((\"nome-da-lista\" . (\"arq1\" \"arq2\"))).")
         (if (member file-path current-files)
             (message "O arquivo já está na lista '%s'." my/active-file-list)
           (setcdr list-cell (append current-files (list file-path)))
+		  (savehist-save)
           (message "Arquivo '%s' adicionado à lista '%s'." 
                    (file-name-nondirectory file-path) my/active-file-list))))))
 
@@ -89,6 +91,7 @@ O formato é ((\"nome-da-lista\" . (\"arq1\" \"arq2\"))).")
             (message "O arquivo '%s' não está na lista '%s'." 
                      (file-name-nondirectory file-path) my/active-file-list)
           (setcdr list-cell (delete file-path current-files))
+		  (savehist-save)
           (message "Arquivo '%s' removido da lista '%s'." 
                    (file-name-nondirectory file-path) my/active-file-list))))))
 
@@ -172,6 +175,7 @@ Se o arquivo não existir, retorna 0."
                               (length files-to-delete) my/manager-current-list-name))
         (dolist (file files-to-delete)
           (setcdr list-cell (delete file (cdr list-cell))))
+		(savehist-save)
         (message "Arquivos removidos!")
         (my/manager-refresh)))))
 
